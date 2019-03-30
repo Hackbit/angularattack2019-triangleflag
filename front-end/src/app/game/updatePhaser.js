@@ -1,4 +1,6 @@
-function updatePlayers(phaserInstance, gameState) {
+import { SocketService } from '../socket/socket.service';
+
+function updatePlayers(phaserInstance, gameState, socket) {
   const playerIds = Object.keys(gameState.players);
 
   for (var i = 0; i < playerIds.length; i++) {
@@ -14,21 +16,25 @@ function updatePlayers(phaserInstance, gameState) {
 
     const playerElement = phaserInstance.elements[playerId];
 
-    handlePlayerMovement(phaserInstance, playerElement, player);
+    handlePlayerMovement(phaserInstance, playerElement, player, socket);
   }
 }
 
-function handlePlayerMovement(phaserInstance, playerElement, player) {
+function handlePlayerMovement(phaserInstance, playerElement, player, socket) {
   if (phaserInstance.cursor.left.isDown) {
-    playerElement.x = player.x - 10;
+    socket.playerChangeDirection({ dx: -1 });
   } else if (phaserInstance.cursor.right.isDown) {
-    playerElement.x = player.x + 10;
+    socket.playerChangeDirection({ dx: 1 });
+    } else if (phaserInstance.cursor.up.isDown) {
+      socket.playerChangeDirection({ dy: -1 });
+    } else if (phaserInstance.cursor.down.isDown) {
+      socket.playerChangeDirection({ dy: 1 });
   } else {
     playerElement.x = player.x;
     playerElement.y = player.y;
   }
 }
 
-export default function updatePhaser(phaserInstance, gameState) {
-  updatePlayers(phaserInstance, gameState);
+export default function updatePhaser(phaserInstance, gameState, socket) {
+  updatePlayers(phaserInstance, gameState, socket);
 }
