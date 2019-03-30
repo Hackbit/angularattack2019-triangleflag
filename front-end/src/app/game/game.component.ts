@@ -18,6 +18,10 @@ let gameState = {};
         [gameConfig]="gameConfig"
         (gameReady)="onGameReady($event)"
       ></phaser-component>
+      <button (click)="onChangeDirection({ dx: 1 })">RIGHT</button>
+      <button (click)="onChangeDirection({ dx: -1 })">LEFT</button>
+      <button (click)="onChangeDirection({ dy: 1 })">DOWN</button>
+      <button (click)="onChangeDirection({ dy: -1 })">TOP</button>
     </div>
   `,
   styleUrls: ["./game.component.scss"],
@@ -76,8 +80,8 @@ export class GameComponent {
     console.log(data);
   }
 
-  onClick(e: string) {
-    this.sService.pushData(e);
+  onChangeDirection({ dx, dy }) {
+    this.sService.playerChangeDirection({ dx, dy });
   }
 
   /**

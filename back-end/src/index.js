@@ -35,10 +35,7 @@ setInterval(function() {
   });
 }, 60);
 
-io.on("connection", function(socket) {
-  console.log("a user connected", socket.id);
-
-  const playerId = socket.id;
+function initPlayer(socket) {
   playerSockets[socket.id] = socket;
 
   const player = {
@@ -49,8 +46,23 @@ io.on("connection", function(socket) {
     dy: 0
   };
   gameState.players[player.id] = player;
+}
+
+io.on("connection", function(socket) {
+  const playerId = socket.id;
+
+  initPlayer(socket);
 
   socket.emit("connect-success", { ...gameState, playerId });
+
+  socket.on("player-change-direction", function({ dx, dy }) {
+    const player = gameState.players[playerId];
+    gameState.players[playerId] = {
+      ...player,
+      dx: dx || player.dx,
+      dy: dy || player.dy
+    };
+  });
 
   socket.on("disconnect", function() {
     delete playerSockets[socket.id];
