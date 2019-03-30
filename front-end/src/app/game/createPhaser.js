@@ -6,8 +6,9 @@ function createPlayers(phaserInstance, gameState) {
     const playerElement = phaserInstance.physics.add.sprite(
       player.x,
       player.y,
-      'star'
+      "star"
     );
+    playerElement.setDisplaySize(30, 30);
     playerElement.setCollideWorldBounds(true);
     phaserInstance.elements[playerId] = playerElement;
   }
@@ -31,7 +32,7 @@ function initCamera(phaserInstance, gameState) {
     gameState.worldSize.y
   );
 
-  phaserInstance.cameras.main.setBackgroundColor('#ccccff');
+  phaserInstance.cameras.main.setBackgroundColor("#ccccff");
 }
 
 export default function createPhaser(phaserInstance, gameState) {
@@ -41,6 +42,8 @@ export default function createPhaser(phaserInstance, gameState) {
 
   const userId = gameState.playerId;
   const userElement = phaserInstance.elements[userId];
-  phaserInstance.cameras.main.startFollow(userElement, true, 1, 1);
-  phaserInstance.cursor = phaserInstance.input.keyboard.createCursorKeys();
+  if (userElement) {
+    phaserInstance.cameras.main.startFollow(userElement, true, 1, 1);
+    phaserInstance.cursor = phaserInstance.input.keyboard.createCursorKeys();
+  }
 }
