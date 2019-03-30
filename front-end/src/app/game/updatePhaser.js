@@ -8,11 +8,22 @@ function updatePlayers(phaserInstance, gameState) {
       phaserInstance.elements[playerId] = phaserInstance.physics.add.sprite(
         player.x,
         player.y,
-        "star"
+        'star'
       );
     }
 
     const playerElement = phaserInstance.elements[playerId];
+
+    handlePlayerMovement(phaserInstance, playerElement, player);
+  }
+}
+
+function handlePlayerMovement(phaserInstance, playerElement, player) {
+  if (phaserInstance.cursor.left.isDown) {
+    playerElement.x = player.x - 10;
+  } else if (phaserInstance.cursor.right.isDown) {
+    playerElement.x = player.x + 10;
+  } else {
     playerElement.x = player.x;
     playerElement.y = player.y;
   }

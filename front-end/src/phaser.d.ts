@@ -589,10 +589,6 @@ declare type PhysicsConfig = {
     /**
      * Impact Physics configuration.
      */
-    physics?: any;
-    /**
-     * Impact Physics configuration.
-     */
     impact?: Phaser.Physics.Impact.WorldConfig;
     /**
      * Matter Physics configuration.
