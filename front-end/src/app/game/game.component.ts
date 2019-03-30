@@ -9,6 +9,7 @@ import { connectServer, onServerUpdate } from "./mockServer";
 import { SocketService } from "../socket/socket.service";
 
 let gameState = {};
+const sService = new SocketService();
 
 @Component({
   selector: "game-component",
@@ -19,11 +20,6 @@ let gameState = {};
         (gameReady)="onGameReady($event)"
       ></phaser-component>
       <br />
-      <button (click)="onChangeDirection({ dx: 1, dy: 0 })">RIGHT</button>
-      <button (click)="onChangeDirection({ dx: -1, dy: 0 })">LEFT</button>
-      <button (click)="onChangeDirection({ dy: 1, dx: 0 })">DOWN</button>
-      <button (click)="onChangeDirection({ dy: -1, dx: 0 })">TOP</button>
-      <button (click)="onShoot()">SHOOT</button>
     </div>
   `,
   styleUrls: ["./game.component.scss"],
@@ -53,7 +49,7 @@ export class GameComponent {
         preloadPhaser(this);
       },
       update: function() {
-        updatePhaser(this, gameState);
+        updatePhaser(this, gameState, sService);
       },
       world: {}
     },
@@ -68,9 +64,9 @@ export class GameComponent {
   /**
    * Instantiate application component.
    */
-  constructor(private sService: SocketService) {
-    this.sService.onConnectSuccess().subscribe(this.onConnectSuccess);
-    this.sService.onGameUpdate().subscribe(this.onGameUpdate);
+  constructor() {
+    sService.onConnectSuccess().subscribe(this.onConnectSuccess);
+    sService.onGameUpdate().subscribe(this.onGameUpdate);
   }
 
   onConnectSuccess(data) {
@@ -79,15 +75,11 @@ export class GameComponent {
 
   onGameUpdate(data) {
     gameState = data;
-    console.log(data);
-  }
-
-  onChangeDirection({ dx, dy }) {
-    this.sService.playerChangeDirection({ dx, dy });
+    // console.log(data);
   }
 
   onShoot() {
-    this.sService.shoot();
+    sService.shoot();
   }
 
   /**

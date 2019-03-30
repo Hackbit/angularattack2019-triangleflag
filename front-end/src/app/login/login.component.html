@@ -1,0 +1,16 @@
+<div class="container">
+  <h1>
+    Triangle Flag
+  </h1>
+  <form>
+    <div>
+      <input autoFocus={true} type="text" placeholder="Name" [(ngModel)]="this.name"  />
+    </div>
+    <div>
+      <button type="submit" class="login-btn">Play</button>
+    </div>
+    <div>
+      <button (click)="login()">Login</button>
+    </div>
+  </form>
+</div>
