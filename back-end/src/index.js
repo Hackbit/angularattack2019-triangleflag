@@ -2,8 +2,14 @@ var app = require("express")();
 var http = require("http").Server(app);
 var io = require("socket.io")(http);
 
+const BULLET_SIZE = {
+  x: 10,
+  y: 10
+};
+
 let gameState = {
   players: {},
+  bullets: {},
   worldSize: {
     x: 3000,
     y: 3000
@@ -131,9 +137,63 @@ function updatePlayers() {
   }
 }
 
+let nextBulletId = 1;
+
+function updateBullets() {
+  const bulletIds = Object.keys(gameState.bullets);
+  const playerIds = Object.keys(gameState.players);
+
+  //  checkCollision
+  const bulletsToRemove = [];
+  for (var i = 0; i < playerIds.length; i++) {
+    const player = gameState.players[playerIds[i]];
+    for (var j = 0; j < bulletIds.length; j++) {
+      let bullet = gameState.bullets[bulletIds[j]];
+      bullet = {
+        ...bullet,
+        x: bullet.x + bullet.dx,
+        y: bullet.y + bullet.dy,
+        updateCount: bullet.updateCount + 1
+      };
+      const hasCollided = checkCollision(
+        {
+          x: player.x,
+          y: player.y,
+          width: gameState.worldSize.x,
+          height: gameState.worldSize.y
+        },
+        {
+          x: bullet.x,
+          y: bullet.y,
+          width: BULLET_SIZE.x,
+          height: BULLET_SIZE.y
+        }
+      );
+      if (hasCollided && bullet.hostPlayerId !== player.id) {
+        gameState.players[playerIds[i]] = {
+          ...player,
+          health: player.health - 1
+        };
+        bulletsToRemove.push(bullet.id);
+        continue;
+      }
+
+      if (bullet.updateCount > 10) {
+        bulletsToRemove.push(bullet.id);
+      }
+      gameState.bullets[bulletIds[j]] = bullet;
+    }
+  }
+
+  bulletsToRemove.forEach(b => {
+    delete gameState.bullets[b];
+  });
+}
+
 const playerSockets = {};
 
 setInterval(function() {
+  updateBullets();
   updatePlayers();
   const playerSocketIds = Object.keys(playerSockets);
   playerSocketIds.forEach(playerSockerId => {
@@ -150,7 +210,8 @@ function initPlayer(socket) {
     x: 20,
     y: 20,
     dx: 0,
-    dy: 0
+    dy: 0,
+    health: 5
   };
   gameState.players[player.id] = player;
 }
@@ -169,6 +230,20 @@ io.on("connection", function(socket) {
       dx: dx || player.dx,
       dy: dy || player.dy
     };
+  });
+
+  socket.on("player-shoot", function() {
+    const player = gameState.players[playerId];
+    const bullet = {
+      id: nextBulletId + 1,
+      x: player.x,
+      y: player.y,
+      dx: player.dx * 10,
+      dy: player.dy * 10,
+      hostPlayerId: player.id,
+      updateCount: 0
+    };
+    gameState.bullets[bullet.id] = bullet;
   });
 
   socket.on("disconnect", function() {

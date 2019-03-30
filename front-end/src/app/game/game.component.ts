@@ -23,6 +23,7 @@ let gameState = {};
       <button (click)="onChangeDirection({ dx: -1, dy: 0 })">LEFT</button>
       <button (click)="onChangeDirection({ dy: 1, dx: 0 })">DOWN</button>
       <button (click)="onChangeDirection({ dy: -1, dx: 0 })">TOP</button>
+      <button (click)="onShoot()">SHOOT</button>
     </div>
   `,
   styleUrls: ["./game.component.scss"],
@@ -83,6 +84,10 @@ export class GameComponent {
 
   onChangeDirection({ dx, dy }) {
     this.sService.playerChangeDirection({ dx, dy });
+  }
+
+  onShoot() {
+    this.sService.shoot();
   }
 
   /**

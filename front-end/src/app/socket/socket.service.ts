@@ -27,6 +27,10 @@ export class SocketService {
     this.socket.emit("player-change-direction", direction);
   }
 
+  shoot() {
+    this.socket.emit("player-shoot");
+  }
+
   //This one is for send data from angular to node
   pushData(e) {
     this.socket.emit("hello", e);
