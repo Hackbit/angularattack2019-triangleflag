@@ -22,7 +22,7 @@ const sService = new SocketService();
       <br />
       <input
         (keyup)="onKey($event)"
-        style="width: 680px;"
+        style="width: 660px; text-align: left;"
         value="{{ this.values }}"
       />
     </div>
