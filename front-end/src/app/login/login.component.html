@@ -1,0 +1,68 @@
+<div class="container" *ngIf="this.pageNumber === this.page.LOGIN">
+  <h1>
+    Triangle Flag
+  </h1>
+  <form>
+    <div>
+      <input autoFocus={true} type="text" name="player_name" placeholder="Name" [(ngModel)]="this.player.name"  />
+    </div>
+    <div>
+      <button (click)="startGame()">Play</button>
+    </div>
+    <div>
+      <button (click)="goToControlsPage()">Controls</button>
+    </div>
+    <div>
+        <button (click)="goToLinkedIn()">About Us</button>
+      </div>
+  </form>
+</div>
+
+
+<div class="container" *ngIf="this.pageNumber === this.page.CONTROLS">
+  <h1>
+    Controls
+  </h1>
+
+  <div>
+    <ul>
+      <li><h3>Movement:</h3></li>
+      <li>Up, Down, Left and Right Arrow keys</li>
+    </ul>
+    <ul>
+      <li><h3>Attack:</h3></li>
+      <li>Use your voice for firing</li>
+    </ul>
+  </div>
+    
+  <div>
+    <button (click)="goToLogin()">Back</button>
+  </div>
+</div>
+  
+
+<div class="container" *ngIf="this.pageNumber === this.page.LINKED_IN">
+    <h1>
+      About Us
+    </h1>
+      
+    <div>
+      <ul>
+        <li><a href="https://www.linkedin.com/in/sudhir-shrestha-48412ab0/" target="_blank"
+                rel="noopener noreferrer"><h3>Sudhir</h3></a></li>
+        <li><a href="https://www.linkedin.com/in/poudelprakash/" target="_blank"
+                rel="noopener noreferrer"><h3>Prakash</h3></a></li>
+        <li><a href="https://www.linkedin.com/in/abhinav-mishra-aa1b388b/" target="_blank"
+                rel="noopener noreferrer"><h3>Abhinav</h3></a></li>
+        <li><a href="https://www.linkedin.com/in/joshianujo7/" target="_blank"
+                rel="noopener noreferrer"><h3>Anuj</h3></a></li>
+      </ul>
+    </div>
+    <div>
+      <button (click)="goToLogin()">Back</button>
+    </div>
+  </div>
+
+<div *ngIf="this.pageNumber === this.page.GAME">
+    <game-component></game-component>
+</div>

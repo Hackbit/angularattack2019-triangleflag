@@ -1,18 +1,18 @@
-import { Component } from '@angular/core';
-import { environment } from '../../environments/environment';
+import { Component } from "@angular/core";
+import { environment } from "../../environments/environment";
 
-import createPhaser from './createPhaser';
-import updatePhaser from './updatePhaser';
-import preloadPhaser from './preloadPhaser';
-import { connectServer, onServerUpdate } from './mockServer';
+import createPhaser from "./createPhaser";
+import updatePhaser from "./updatePhaser";
+import preloadPhaser from "./preloadPhaser";
+import { connectServer, onServerUpdate } from "./mockServer";
 
-import { SocketService } from '../socket/socket.service';
+import { SocketService } from "../socket/socket.service";
 
 let gameState = {};
 const sService = new SocketService();
 
 @Component({
-  selector: 'game-component',
+  selector: "game-component",
   template: `
     <div>
       <phaser-component
@@ -27,7 +27,7 @@ const sService = new SocketService();
       />
     </div>
   `,
-  styleUrls: ['./game.component.scss'],
+  styleUrls: ["./game.component.scss"],
   providers: [SocketService]
 })
 export class GameComponent {
@@ -60,7 +60,7 @@ export class GameComponent {
       world: {}
     },
     physics: {
-      default: 'arcade',
+      default: "arcade",
       arcade: {
         debug: false
       }
@@ -83,6 +83,10 @@ export class GameComponent {
   onGameUpdate(data) {
     gameState = data;
     // console.log(data);
+  }
+
+  onShoot() {
+    sService.shoot();
   }
 
   /**

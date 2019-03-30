@@ -1,14 +1,14 @@
-import { Component } from "@angular/core";
+import { Component } from '@angular/core'
 
 /**
  * Application component.
  */
 @Component({
-  selector: "app-root",
+  selector: 'app-root',
   template: `
     <div>
-      <game-component></game-component>
+      <login-component></login-component>
     </div>
-  `
+  `,
 })
 export class AppComponent {}

@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css?family=Amaranth:400,700');
+
+html {
+  background: $colorAppBackground;
+}
+
+body {
+  font-family: 'Amaranth', sans-serif;
+}
+
+body {
+  font-family: $fontFamilySans;
+  font-size: $fontSize16;
+  font-weight: $fontWeightSmall;
+  text-overflow: ellipsis;
+}
+
+h1 {
+  font-size: $fontSize36;
+  line-height: $lineHeight46;
+  font-family: $fontFamilySans;
+  font-weight: $fontWeightBold;
+
+  @media (min-width: $breakpointSmall) {
+    font-size: 2.8rem;
+    line-height: calc(2.8rem + 10px);
+  }
+}
+
+h2 {
+  font-size: $fontSize36;
+  line-height: $lineHeight46;
+  font-family: $fontFamilySans;
+  font-weight: $fontWeightBold;
+  margin: 0;
+
+  &.upper {
+    text-transform: uppercase;
+  }
+}
+
+h3 {
+  font-family: $fontFamilySans;
+  font-weight: $fontWeightDefault;
+  font-size: $fontSize27;
+  line-height: $lineHeight37;
+  font-weight: $fontWeightBold;
+  margin: 0;
+}
+
+h4 {
+  font-family: $fontFamilySans;
+  font-weight: $fontWeightDefault;
+  font-size: $fontSize22;
+  line-height: $lineHeight34;
+  margin: 0;
+}
+
+label {
+  font-family: $fontFamilySans;
+  font-size: $fontSize14;
+  margin-top: 1rem;
+}
+
+p {
+  font-family: $fontFamilySans;
+  font-size: $fontSize16;
+  line-height: $lineHeight28;
+}
+
+.container {
+  width: 500px;
+  margin: 10% auto 0;
+  text-align: center;
+  background: $colorBeige;
+  border-radius: 10px;
+  box-shadow: 0 10px $colorBeigeShadow;
+  overflow: hidden;
+  padding: 50px 30px;
+  height: auto !important;
+  color: $colorText;
+
+  a {
+    text-decoration: none;
+    color: $colorText;
+  }
+
+  h1 {
+    margin-bottom: 50px;
+  }
+}
