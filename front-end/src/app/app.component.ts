@@ -8,7 +8,6 @@ import { Component } from '@angular/core'
   template: `
     <div>
       <login-component></login-component>
-      <game-component></game-component>
     </div>
   `,
 })
