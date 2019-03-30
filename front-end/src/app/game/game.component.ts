@@ -20,6 +20,11 @@ const sService = new SocketService();
         (gameReady)="onGameReady($event)"
       ></phaser-component>
       <br />
+      <input
+        (keyup)="onKey($event)"
+        style="width: 680px;"
+        value="{{ this.values }}"
+      />
     </div>
   `,
   styleUrls: ['./game.component.scss'],
@@ -30,6 +35,7 @@ export class GameComponent {
    * Game instance.
    */
   public game: Phaser.Game;
+  public values: any;
 
   /**
    * Game configuration.
@@ -67,6 +73,7 @@ export class GameComponent {
   constructor() {
     sService.onConnectSuccess().subscribe(this.onConnectSuccess);
     sService.onGameUpdate().subscribe(this.onGameUpdate);
+    this.values = ':';
   }
 
   onConnectSuccess(data) {
@@ -85,5 +92,36 @@ export class GameComponent {
    */
   public onGameReady(game: Phaser.Game): void {
     this.game = game;
+  }
+
+  public onKey(event: any) {
+    if (event.key == 'Enter') {
+      this.executeCommand(event.target.value);
+      this.values = ':';
+    } else {
+      this.values = event.target.value;
+    }
+  }
+  onChangeDirection({ dx, dy }) {
+     sService.playerChangeDirection({ dx, dy });
+  }
+
+  public executeCommand(command: any) {
+    switch (command.slice(1, command.length)) {
+      case 'h':
+        this.onChangeDirection({ dx: 1, dy: 0 });
+        break;
+      case 'l':
+        this.onChangeDirection({ dx: -1, dy: 0 });
+        break;
+      case 'j':
+        this.onChangeDirection({ dy: 1, dx: 0 });
+        break;
+      case 'k':
+        this.onChangeDirection({ dy: -1, dx: 0 });
+        break;
+      default:
+        console.log(command);
+    }
   }
 }
