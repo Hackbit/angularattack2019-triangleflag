@@ -113,10 +113,10 @@ export class GameComponent {
   public executeCommand(command: any) {
     switch (command.slice(1, command.length)) {
       case 'h':
-        this.onChangeDirection({ dx: 1, dy: 0 });
+        this.onChangeDirection({ dx: -1, dy: 0 });
         break;
       case 'l':
-        this.onChangeDirection({ dx: -1, dy: 0 });
+        this.onChangeDirection({ dx: 1, dy: 0 });
         break;
       case 'j':
         this.onChangeDirection({ dy: 1, dx: 0 });
