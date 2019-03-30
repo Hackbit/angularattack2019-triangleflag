@@ -6,11 +6,9 @@ import updatePhaser from "./updatePhaser";
 import preloadPhaser from "./preloadPhaser";
 import { connectServer, onServerUpdate } from "./mockServer";
 
-let gameState = {};
+import { SocketService } from "../socket/socket.service";
 
-onServerUpdate(function(newGameState) {
-  gameState = newGameState;
-});
+let gameState = {};
 
 @Component({
   selector: "game-component",
@@ -22,7 +20,8 @@ onServerUpdate(function(newGameState) {
       ></phaser-component>
     </div>
   `,
-  styleUrls: ["./game.component.scss"]
+  styleUrls: ["./game.component.scss"],
+  providers: [SocketService]
 })
 export class GameComponent {
   /**
@@ -63,7 +62,23 @@ export class GameComponent {
   /**
    * Instantiate application component.
    */
-  public constructor() {}
+  constructor(private sService: SocketService) {
+    this.sService.onConnectSuccess().subscribe(this.onConnectSuccess);
+    this.sService.onGameUpdate().subscribe(this.onGameUpdate);
+  }
+
+  onConnectSuccess(data) {
+    gameState = data;
+  }
+
+  onGameUpdate(data) {
+    gameState = data;
+    console.log(data);
+  }
+
+  onClick(e: string) {
+    this.sService.pushData(e);
+  }
 
   /**
    * Game ready event handler.
