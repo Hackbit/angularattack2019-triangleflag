@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Amaranth:400,700');
 
 html {
-  background: #009688;
+  background: $colorAppBackground;
 }
 
 body {
@@ -68,43 +68,21 @@ p {
   line-height: $lineHeight28;
 }
 
-.outer-container {
-  width: 500px;
-  margin: 10% auto 0;
-  text-align: center;
-  background: #f1f1d9;
-  border-radius: 10px;
-  box-shadow: 0 10px #9d8c7a;
-  overflow: hidden;
-  padding: 50px 30px;
-  height: auto !important;
-  color: #582828;
-
-  a {
-    text-decoration: none;
-    color: #582828;
-  }
-
-  h1 {
-    margin-bottom: 50px;
-  }
-}
-
 .container {
   width: 500px;
   margin: 10% auto 0;
   text-align: center;
-  background: #f1f1d9;
+  background: $colorBeige;
   border-radius: 10px;
-  box-shadow: 0 10px #9d8c7a;
+  box-shadow: 0 10px $colorBeigeShadow;
   overflow: hidden;
   padding: 50px 30px;
   height: auto !important;
-  color: #582828;
+  color: $colorText;
 
   a {
     text-decoration: none;
-    color: #582828;
+    color: $colorText;
   }
 
   h1 {
