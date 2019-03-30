@@ -1,17 +1,18 @@
-import { Component } from "@angular/core";
-import { environment } from "../../environments/environment";
+import { Component } from '@angular/core';
+import { environment } from '../../environments/environment';
 
-import createPhaser from "./createPhaser";
-import updatePhaser from "./updatePhaser";
-import preloadPhaser from "./preloadPhaser";
-import { connectServer, onServerUpdate } from "./mockServer";
+import createPhaser from './createPhaser';
+import updatePhaser from './updatePhaser';
+import preloadPhaser from './preloadPhaser';
+import { connectServer, onServerUpdate } from './mockServer';
 
-import { SocketService } from "../socket/socket.service";
+import { SocketService } from '../socket/socket.service';
 
 let gameState = {};
+const sService = new SocketService();
 
 @Component({
-  selector: "game-component",
+  selector: 'game-component',
   template: `
     <div>
       <phaser-component
@@ -19,13 +20,9 @@ let gameState = {};
         (gameReady)="onGameReady($event)"
       ></phaser-component>
       <br />
-      <button (click)="onChangeDirection({ dx: 1, dy: 0 })">RIGHT</button>
-      <button (click)="onChangeDirection({ dx: -1, dy: 0 })">LEFT</button>
-      <button (click)="onChangeDirection({ dy: 1, dx: 0 })">DOWN</button>
-      <button (click)="onChangeDirection({ dy: -1, dx: 0 })">TOP</button>
     </div>
   `,
-  styleUrls: ["./game.component.scss"],
+  styleUrls: ['./game.component.scss'],
   providers: [SocketService]
 })
 export class GameComponent {
@@ -52,12 +49,12 @@ export class GameComponent {
         preloadPhaser(this);
       },
       update: function() {
-        updatePhaser(this, gameState);
+        updatePhaser(this, gameState, sService);
       },
       world: {}
     },
     physics: {
-      default: "arcade",
+      default: 'arcade',
       arcade: {
         debug: false
       }
@@ -67,9 +64,9 @@ export class GameComponent {
   /**
    * Instantiate application component.
    */
-  constructor(private sService: SocketService) {
-    this.sService.onConnectSuccess().subscribe(this.onConnectSuccess);
-    this.sService.onGameUpdate().subscribe(this.onGameUpdate);
+  constructor() {
+    sService.onConnectSuccess().subscribe(this.onConnectSuccess);
+    sService.onGameUpdate().subscribe(this.onGameUpdate);
   }
 
   onConnectSuccess(data) {
@@ -78,11 +75,7 @@ export class GameComponent {
 
   onGameUpdate(data) {
     gameState = data;
-    console.log(data);
-  }
-
-  onChangeDirection({ dx, dy }) {
-    this.sService.playerChangeDirection({ dx, dy });
+    // console.log(data);
   }
 
   /**
