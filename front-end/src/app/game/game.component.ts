@@ -1,11 +1,11 @@
-import { Component } from "@angular/core";
-import { environment } from "../../environments/environment";
+import { Component } from '@angular/core';
+import { environment } from '../../environments/environment';
 
-import createPhaser from "./createPhaser";
-import updatePhaser from "./updatePhaser";
-import preloadPhaser from "./preloadPhaser";
+import createPhaser from './createPhaser';
+import updatePhaser from './updatePhaser';
+import preloadPhaser from './preloadPhaser';
 
-import { SocketService } from "../socket/socket.service";
+import { SocketService } from '../socket/socket.service';
 
 let gameState = {
   playerId: null
@@ -14,7 +14,7 @@ let gameState = {
 const sService = new SocketService();
 
 @Component({
-  selector: "game-component",
+  selector: 'game-component',
   template: `
     <div>
       <phaser-component
@@ -31,7 +31,7 @@ const sService = new SocketService();
       />
     </div>
   `,
-  styleUrls: ["./game.component.scss"],
+  styleUrls: ['./game.component.scss'],
   providers: [SocketService]
 })
 export class GameComponent {
@@ -53,12 +53,12 @@ export class GameComponent {
     scene: {
       create: function() {
         const map = this.make.tilemap({
-          key: "map",
+          key: 'map',
           tileWidth: 16,
           tileHeight: 16
         });
         //  Now add in the tileset
-        const tileset = map.addTilesetImage("tiles");
+        const tileset = map.addTilesetImage('tiles');
         const layer = map.createStaticLayer(0, tileset, 0, 0);
         createPhaser(this, gameState);
       },
@@ -71,7 +71,7 @@ export class GameComponent {
       world: {}
     },
     physics: {
-      default: "arcade",
+      default: 'arcade',
       arcade: {
         debug: false
       }
@@ -84,7 +84,7 @@ export class GameComponent {
   constructor() {
     sService.onConnectSuccess().subscribe(this.onConnectSuccess);
     sService.onGameUpdate().subscribe(this.onGameUpdate);
-    this.values = ":";
+    this.values = ':';
   }
 
   onConnectSuccess(data) {
@@ -114,9 +114,9 @@ export class GameComponent {
   }
 
   public onKey(event: any) {
-    if (event.key == "Enter") {
+    if (event.key == 'Enter') {
       this.executeCommand(event.target.value);
-      this.values = ":";
+      this.values = ':';
     } else {
       this.values = event.target.value;
     }
@@ -127,24 +127,24 @@ export class GameComponent {
 
   public executeCommand(command: any) {
     switch (command.slice(1, command.length)) {
-      case "h":
+      case 'h':
         this.onChangeDirection({ dx: -1, dy: 0 });
         break;
-      case "l":
+      case 'l':
         this.onChangeDirection({ dx: 20, dy: 0 });
         break;
-      case "j":
-        this.onChangeDirection({ dy: 1, dx: 0 });
+      case 'j':
+        this.onChangeDirection({ dy: 20, dx: 0 });
         break;
-      case "k":
+      case 'k':
         this.onChangeDirection({ dy: -1, dx: 0 });
         break;
-      case "m":
-        console.log("new");
+      case 'm':
+        console.log('new');
         this.onShoot();
         break;
-      case "bomb":
-        console.log("bomb");
+      case 'bomb':
+        console.log('bomb');
         this.addBomb();
         break;
       default:
