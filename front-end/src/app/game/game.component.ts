@@ -155,15 +155,6 @@ export class GameComponent {
     this.game = game;
   }
 
-  public onKey(event: any) {
-    if (event.key == "Enter") {
-      this.executeCommand(event.target.value);
-      this.values = ":";
-    } else {
-      this.values = event.target.value;
-    }
-  }
-
   onChangeDirection({ dx, dy }) {
     sService.playerChangeDirection({ dx, dy, blink: false });
   }
