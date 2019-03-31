@@ -12,8 +12,8 @@ export default class Game {
     this.bullets = {};
     this.bombs = {};
     this.worldSize = {
-      x: 3000,
-      y: 3000
+      x: 1000,
+      y: 1000
     };
     this.socketUtils = socketUtils;
   }
