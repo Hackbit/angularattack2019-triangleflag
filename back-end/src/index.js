@@ -1,3 +1,7 @@
+import {
+  addBomb
+} from './handleBomb'
+
 var app = require("express")();
 var http = require("http").Server(app);
 var io = require("socket.io")(http);
@@ -10,6 +14,7 @@ const BULLET_SIZE = {
 let gameState = {
   players: {},
   bullets: {},
+  bombs: {},
   worldSize: {
     x: 3000,
     y: 3000
@@ -32,7 +37,12 @@ function checkCollision(rect1, rect2) {
   return false;
 }
 
-function handlePlayerCollision(id, { x, y, dx, dy }) {
+function handlePlayerCollision(id, {
+  x,
+  y,
+  dx,
+  dy
+}) {
   const playerIds = Object.keys(gameState.players);
   const playerHasCollided = false;
   const playerSize = gameState.playerSize;
@@ -43,15 +53,17 @@ function handlePlayerCollision(id, { x, y, dx, dy }) {
       continue;
     }
     let subjectPlayer = gameState.players[pId];
-    const hasCollided = checkCollision(
-      { x, y, width: playerSize.x, height: playerSize.y },
-      {
-        x: subjectPlayer.x,
-        y: subjectPlayer.y,
-        width: playerSize.x,
-        height: playerSize.y
-      }
-    );
+    const hasCollided = checkCollision({
+      x,
+      y,
+      width: playerSize.x,
+      height: playerSize.y
+    }, {
+      x: subjectPlayer.x,
+      y: subjectPlayer.y,
+      width: playerSize.x,
+      height: playerSize.y
+    });
     if (hasCollided) {
       const newDx = subjectPlayer.dx * -1;
       const newDy = subjectPlayer.dy * -1;
@@ -82,7 +94,12 @@ function handlePlayerCollision(id, { x, y, dx, dy }) {
   };
 }
 
-function handleBoundaryCollision({ x, y, dx, dy }) {
+function handleBoundaryCollision({
+  x,
+  y,
+  dx,
+  dy
+}) {
   const worldSize = gameState.worldSize;
 
   if (x > worldSize.x) {
@@ -114,7 +131,7 @@ function handleBoundaryCollision({ x, y, dx, dy }) {
 
 function updatePlayers() {
   const playerIds = Object.keys(gameState.players);
-  console.log(gameState);
+  // console.log(gameState);
 
   for (var i = 0; i < playerIds.length; i++) {
     const playerId = playerIds[i];
@@ -155,20 +172,17 @@ function updateBullets() {
         y: bullet.y + bullet.dy,
         updateCount: bullet.updateCount + 1
       };
-      const hasCollided = checkCollision(
-        {
-          x: player.x,
-          y: player.y,
-          width: gameState.worldSize.x,
-          height: gameState.worldSize.y
-        },
-        {
-          x: bullet.x,
-          y: bullet.y,
-          width: BULLET_SIZE.x,
-          height: BULLET_SIZE.y
-        }
-      );
+      const hasCollided = checkCollision({
+        x: player.x,
+        y: player.y,
+        width: gameState.worldSize.x,
+        height: gameState.worldSize.y
+      }, {
+        x: bullet.x,
+        y: bullet.y,
+        width: BULLET_SIZE.x,
+        height: BULLET_SIZE.y
+      });
       if (hasCollided && bullet.hostPlayerId !== player.id) {
         gameState.players[playerIds[i]] = {
           ...player,
@@ -192,7 +206,7 @@ function updateBullets() {
 
 const playerSockets = {};
 
-setInterval(function() {
+setInterval(function () {
   updateBullets();
   updatePlayers();
   const playerSocketIds = Object.keys(playerSockets);
@@ -216,14 +230,20 @@ function initPlayer(socket) {
   gameState.players[player.id] = player;
 }
 
-io.on("connection", function(socket) {
+io.on("connection", function (socket) {
   const playerId = socket.id;
 
   initPlayer(socket);
 
-  socket.emit("connect-success", { ...gameState, playerId });
+  socket.emit("connect-success", {
+    ...gameState,
+    playerId
+  });
 
-  socket.on("player-change-direction", function({ dx, dy }) {
+  socket.on("player-change-direction", function ({
+    dx,
+    dy
+  }) {
     const player = gameState.players[playerId];
     gameState.players[playerId] = {
       ...player,
@@ -232,7 +252,9 @@ io.on("connection", function(socket) {
     };
   });
 
-  socket.on("player-shoot", function() {
+  socket.on("add-bomb", () => addBomb(gameState, playerId))
+
+  socket.on("player-shoot", function () {
     const player = gameState.players[playerId];
     const bullet = {
       id: nextBulletId + 1,
@@ -244,9 +266,10 @@ io.on("connection", function(socket) {
       updateCount: 0
     };
     gameState.bullets[bullet.id] = bullet;
+    console.log('bullett', gameState);
   });
 
-  socket.on("disconnect", function() {
+  socket.on("disconnect", function () {
     delete playerSockets[socket.id];
     delete gameState.players[socket.id];
     console.log("user disconnected");
@@ -260,6 +283,6 @@ io.on("connection", function(socket) {
   //   socket.broadcast.emit("hi");
 });
 
-http.listen(3000, function() {
+http.listen(3000, function () {
   console.log("listening on *:3000");
 });

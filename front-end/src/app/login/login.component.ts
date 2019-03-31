@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
     LINKED_IN: 4,
   }
   pageNumber: number = this.page.GAME
-  
+
   constructor() {}
 
   ngOnInit() {}
