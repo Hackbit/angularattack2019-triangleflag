@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
-import { environment } from '../../environments/environment';
+import { Component } from "@angular/core";
+import { environment } from "../../environments/environment";
 
-import createPhaser from './createPhaser';
-import updatePhaser from './updatePhaser';
-import preloadPhaser from './preloadPhaser';
+import createPhaser from "./createPhaser";
+import updatePhaser from "./updatePhaser";
+import preloadPhaser from "./preloadPhaser";
 
-import { SocketService } from '../socket/socket.service';
+import { SocketService } from "../socket/socket.service";
 
 let gameState = {
   playerId: null
@@ -14,7 +14,7 @@ let gameState = {
 const sService = new SocketService();
 
 @Component({
-  selector: 'game-component',
+  selector: "game-component",
   template: `
     <div class="game-wrap">
       <phaser-component
@@ -31,7 +31,7 @@ const sService = new SocketService();
       />
     </div>
   `,
-  styleUrls: ['./game.component.scss'],
+  styleUrls: ["./game.component.scss"],
   providers: [SocketService]
 })
 export class GameComponent {
@@ -63,7 +63,7 @@ export class GameComponent {
       world: {}
     },
     physics: {
-      default: 'arcade',
+      default: "arcade",
       arcade: {
         debug: false
       }
@@ -111,9 +111,9 @@ export class GameComponent {
   }
 
   public onKey(event: any) {
-    if (event.key == 'Enter') {
+    if (event.key == "Enter") {
       this.executeCommand(event.target.value);
-      this.values = ':';
+      this.values = ":";
     } else {
       this.values = event.target.value;
     }
@@ -124,7 +124,6 @@ export class GameComponent {
 
   public executeCommand(command: any) {
     switch (command.slice(1, command.length)) {
-<<<<<<< HEAD
       case "h":
         this.onChangeDirection({ dx: -5, dy: 0 });
         break;
@@ -136,26 +135,13 @@ export class GameComponent {
         break;
       case "k":
         this.onChangeDirection({ dy: -5, dx: 0 });
-=======
-      case 'h':
-        this.onChangeDirection({ dx: -1, dy: 0 });
         break;
-      case 'l':
-        this.onChangeDirection({ dx: 20, dy: 0 });
-        break;
-      case 'j':
-        this.onChangeDirection({ dy: 20, dx: 0 });
-        break;
-      case 'k':
-        this.onChangeDirection({ dy: -1, dx: 0 });
->>>>>>> 65563fa3f4b08fabf27a5ff248edf5ace14c2163
-        break;
-      case 'm':
-        console.log('new');
+      case "m":
+        console.log("new");
         this.onShoot();
         break;
-      case 'bomb':
-        console.log('bomb');
+      case "bomb":
+        console.log("bomb");
         this.addBomb();
         break;
       default:
