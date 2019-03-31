@@ -1,5 +1,10 @@
 class Bomb {
-  constructor({ id, x, y, hostId }) {
+  constructor({
+    id,
+    x,
+    y,
+    hostId
+  }) {
     this.id = id;
     this.x = x;
     this.y = y;
@@ -15,7 +20,7 @@ class Bomb {
 
 Bomb.INCREMENT = 5;
 Bomb.SIZE = 5;
-Bomb.EXPLODE_TIMER = 100;
+Bomb.EXPLODE_TIMER = 50;
 Bomb.EXPLODE_SIZE = 100;
 
 export default Bomb;

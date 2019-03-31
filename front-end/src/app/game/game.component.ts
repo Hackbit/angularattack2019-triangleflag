@@ -42,13 +42,13 @@ const sService = new SocketService()
                 </ul>
                 <ul>
                   <li><h3>Attack:</h3></li>
-                  <li>"Type bomb" -> Plant a bomb</li>
+                  <li>"Type e or bomb" -> Plant a bomb</li>
                 </ul>
                 <ul>
                   <li>
                     <h3>Blink:</h3>
                   </li>
-                  <li>"e" -> Blink right</li>
+                  <li>"v" -> Blink right</li>
                   <li>"b" -> Blink left</li>
                   <li>"gg" -> Blink to top</li>
                   <li>"Shit + gg" -> Blink to bottom</li>
@@ -178,11 +178,14 @@ export class GameComponent {
         case 'k':
           this.onChangePosition({ dy: -5, dx: 0, blink: false })
           break
-        case 'e':
+        case 'v':
           this.onChangePosition({ dx: -5, dy: 0, blink: true })
           break
         case 'b':
           this.onChangePosition({ dx: 5, dy: 0, blink: true })
+          break
+        case 'e':
+          this.addBomb()
           break
       }
     }
