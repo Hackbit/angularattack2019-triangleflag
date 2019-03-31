@@ -18,7 +18,6 @@ function updatePlayers(phaserInstance, gameState, socket) {
 
       if (playerId == gameState.playerId) {
         phaserInstance.cameras.main.startFollow(playerElement, true, 1, 1);
-        phaserInstance.cursor = phaserInstance.input.keyboard.createCursorKeys();
       }
     }
 

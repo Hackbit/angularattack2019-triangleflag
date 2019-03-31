@@ -52,7 +52,7 @@ export class GameComponent {
     height: 416,
     scene: {
       create: function() {
-        createPhaser(this, gameState);
+
         const map = this.make.tilemap({
           key: "map",
           tileWidth: 16,
@@ -61,6 +61,7 @@ export class GameComponent {
         //  Now add in the tileset
         const tileset = map.addTilesetImage("tiles");
         const layer = map.createStaticLayer(0, tileset, 0, 0);
+        createPhaser(this, gameState);
       },
       preload: function() {
         preloadPhaser(this);
