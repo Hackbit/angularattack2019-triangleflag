@@ -39,11 +39,4 @@ export default function createPhaser(phaserInstance, gameState) {
   phaserInstance.elements = {};
   initCamera(phaserInstance, gameState);
   createElements(phaserInstance, gameState);
-
-  const userId = gameState.playerId;
-  const userElement = phaserInstance.elements[userId];
-  if (userElement) {
-    phaserInstance.cameras.main.startFollow(userElement, true, 1, 1);
-    phaserInstance.cursor = phaserInstance.input.keyboard.createCursorKeys();
-  }
 }
