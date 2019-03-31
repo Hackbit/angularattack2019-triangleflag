@@ -28,7 +28,7 @@ function initCamera(phaserInstance, gameState) {
     gameState.worldSize.y
   );
 
-  phaserInstance.cameras.main.setBackgroundColor("#ccccff");
+  phaserInstance.cameras.main.setBackgroundColor("#000000");
 }
 
 export default function createPhaser(phaserInstance, gameState) {
