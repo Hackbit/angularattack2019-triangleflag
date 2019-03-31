@@ -52,7 +52,6 @@ export class GameComponent {
     height: 416,
     scene: {
       create: function() {
-
         const map = this.make.tilemap({
           key: "map",
           tileWidth: 16,
@@ -132,7 +131,7 @@ export class GameComponent {
         this.onChangeDirection({ dx: -1, dy: 0 });
         break;
       case "l":
-        this.onChangeDirection({ dx: 1, dy: 0 });
+        this.onChangeDirection({ dx: 20, dy: 0 });
         break;
       case "j":
         this.onChangeDirection({ dy: 1, dx: 0 });

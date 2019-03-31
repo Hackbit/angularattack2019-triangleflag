@@ -9,9 +9,16 @@ const playerSockets = {};
 
 gameState.initGameLoop(function() {
   const playerSocketIds = Object.keys(playerSockets);
-  playerSocketIds.forEach(playerSockerId => {
-    const socket = playerSockets[playerSockerId];
-    socket.emit("game-update", gameState);
+  playerSocketIds.forEach(playerSocketId => {
+    const socket = playerSockets[playerSocketId];
+
+    socket.emit("game-update", {
+      players: gameState.players,
+      bullets: gameState.bullets,
+      bombs: gameState.bombs,
+      worldSize: gameState.worldSize,
+      playerId: playerSocketId
+    });
   });
 });
 
@@ -47,7 +54,7 @@ io.on("connection", function(socket) {
   });
 });
 
-var listeningPort = process.env.PORT || 3000
-http.listen(listeningPort, function () {
+var listeningPort = process.env.PORT || 3000;
+http.listen(listeningPort, function() {
   console.log("listening on *:" + listeningPort);
 });

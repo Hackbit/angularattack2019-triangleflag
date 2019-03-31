@@ -1,16 +1,12 @@
+import { addPlayer } from "./player";
+
 function createPlayers(phaserInstance, gameState) {
   const playerIds = Object.keys(gameState.players);
   for (var i = 0; i < playerIds.length; i++) {
     const playerId = playerIds[i];
     const player = gameState.players[playerId];
-    const playerElement = phaserInstance.physics.add.sprite(
-      player.x,
-      player.y,
-      "star"
-    );
-    playerElement.setDisplaySize(30, 30);
-    playerElement.setCollideWorldBounds(true);
-    phaserInstance.elements[playerId] = playerElement;
+
+    addPlayer(phaserInstance, gameState, player);
   }
 }
 
