@@ -39,6 +39,22 @@ export class SocketService {
     this.socket.emit("player-change-direction", direction);
   }
 
+  playerChangePosition(direction) {
+    this.socket.emit("player-change-position", direction);
+  }
+
+  onBlinkToTop() {
+    this.socket.emit("player-blink-to-edge", {
+      top: true
+    });
+  }
+
+  onBlinkToBottom() {
+    this.socket.emit("player-blink-to-edge", {
+      bottom: true
+    });
+  }
+
   shoot() {
     this.socket.emit("player-shoot");
   }

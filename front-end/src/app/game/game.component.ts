@@ -21,14 +21,6 @@ const sService = new SocketService();
         [gameConfig]="gameConfig"
         (gameReady)="onGameReady($event)"
       ></phaser-component>
-      <br />
-      <input
-        autofocus
-        id="cli"
-        (keyup)="onKey($event)"
-        style="width: 660px; text-align: left;"
-        value="{{ this.values }}"
-      />
     </div>
   `,
   styleUrls: ["./game.component.scss"],
@@ -80,6 +72,59 @@ export class GameComponent {
     this.values = ":";
   }
 
+  ngOnInit() {
+    let stringBuffer = "";
+    document.onkeypress = evt => {
+      var charCode = evt.keyCode || evt.which;
+      var charStr = String.fromCharCode(charCode);
+      var shiftKeyTrue = evt.shiftKey;
+
+      if (stringBuffer.length > 20) {
+        stringBuffer = stringBuffer.slice(1, stringBuffer.length);
+      }
+      stringBuffer += charStr;
+
+      const ggRegex = /^.*gg$/;
+      const ggCapsRegex = /^.*GG$/;
+
+      if (ggRegex.test(stringBuffer)) {
+        this.onBlinkToTop();
+        return;
+      }
+
+      if (ggCapsRegex.test(stringBuffer)) {
+        this.onBlinkToBottom();
+        return;
+      }
+
+      if (/^.*bomb$/.test(stringBuffer)) {
+        this.addBomb();
+        return;
+      }
+
+      switch (charStr) {
+        case "h":
+          this.onChangePosition({ dx: -5, dy: 0, blink: false });
+          break;
+        case "l":
+          this.onChangePosition({ dx: 5, dy: 0, blink: false });
+          break;
+        case "j":
+          this.onChangePosition({ dy: 5, dx: 0, blink: false });
+          break;
+        case "k":
+          this.onChangePosition({ dy: -5, dx: 0, blink: false });
+          break;
+        case "e":
+          this.onChangePosition({ dx: -5, dy: 0, blink: true });
+          break;
+        case "b":
+          this.onChangePosition({ dx: 5, dy: 0, blink: true });
+          break;
+      }
+    };
+  }
+
   onConnectSuccess(data) {
     gameState = data;
   }
@@ -118,34 +163,20 @@ export class GameComponent {
       this.values = event.target.value;
     }
   }
+
   onChangeDirection({ dx, dy }) {
-    sService.playerChangeDirection({ dx, dy });
+    sService.playerChangeDirection({ dx, dy, blink: false });
   }
 
-  public executeCommand(command: any) {
-    switch (command.slice(1, command.length)) {
-      case "h":
-        this.onChangeDirection({ dx: -5, dy: 0 });
-        break;
-      case "l":
-        this.onChangeDirection({ dx: 5, dy: 0 });
-        break;
-      case "j":
-        this.onChangeDirection({ dy: 5, dx: 0 });
-        break;
-      case "k":
-        this.onChangeDirection({ dy: -5, dx: 0 });
-        break;
-      case "m":
-        console.log("new");
-        this.onShoot();
-        break;
-      case "bomb":
-        console.log("bomb");
-        this.addBomb();
-        break;
-      default:
-        console.log(command);
-    }
+  onChangePosition({ dx, dy, blink }) {
+    sService.playerChangePosition({ dx, dy, blink });
+  }
+
+  onBlinkToTop() {
+    sService.onBlinkToTop();
+  }
+
+  onBlinkToBottom() {
+    sService.onBlinkToBottom();
   }
 }

@@ -49,6 +49,26 @@ io.on("connection", function(socket) {
     player.updateDirection({ dx, dy });
   });
 
+  socket.on("player-change-position", function({ dx, dy, blink }) {
+    const player = gameState.players[playerId];
+    player.updatePosition({ dx, dy, blink });
+  });
+
+  socket.on("player-blink-to-edge", function({ top, bottom }) {
+    const player = gameState.players[playerId];
+    if (top) {
+      player.blinkToPosition({
+        y: 100
+      });
+    }
+
+    if (bottom) {
+      player.blinkToPosition({
+        y: gameState.worldSize.y - 100
+      });
+    }
+  });
+
   socket.on("add-bomb", function() {
     const player = gameState.players[playerId];
     gameState.addNewBomb(player);
