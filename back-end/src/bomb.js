@@ -5,15 +5,17 @@ class Bomb {
     this.y = y;
     this.hostId = hostId;
     this.timer = 0;
+    this.exploded = false;
   }
 
   incrementTimer() {
-    this.time = this.timer + 1;
+    this.timer = this.timer + 1;
   }
 }
 
 Bomb.INCREMENT = 5;
 Bomb.SIZE = 5;
-Bomb.EXPLODE_TIMER = 20;
+Bomb.EXPLODE_TIMER = 100;
+Bomb.EXPLODE_SIZE = 100;
 
 export default Bomb;

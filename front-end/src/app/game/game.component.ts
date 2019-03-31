@@ -84,6 +84,7 @@ export class GameComponent {
   constructor() {
     sService.onConnectSuccess().subscribe(this.onConnectSuccess);
     sService.onGameUpdate().subscribe(this.onGameUpdate);
+    sService.onPlayerDied().subscribe(this.onPlayerDied);
     this.values = ":";
   }
 
@@ -98,6 +99,10 @@ export class GameComponent {
 
   onShoot() {
     sService.shoot();
+  }
+
+  onPlayerDied() {
+    alert("YOU DEAD MAN");
   }
 
   addBomb() {

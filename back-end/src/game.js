@@ -1,15 +1,13 @@
 import Player from "./player";
 import Bullet from "./bullet";
-import {
-  checkCollision
-} from "./utils";
+import { checkCollision } from "./utils";
 import Bomb from "./bomb";
 
 let nextBulletId = 1;
 let nextBombId = 1;
 
 export default class Game {
-  constructor() {
+  constructor(socketUtils) {
     this.players = {};
     this.bullets = {};
     this.bombs = {};
@@ -17,6 +15,7 @@ export default class Game {
       x: 3000,
       y: 3000
     };
+    this.socketUtils = socketUtils;
   }
 
   initGameLoop(cb) {
@@ -45,7 +44,6 @@ export default class Game {
 
   removePlayer(playerId) {
     delete this.players[playerId];
-    console.log("user disconnected");
   }
 
   addNewBullet(player) {
@@ -85,6 +83,12 @@ export default class Game {
     return;
   }
 
+  handlePlayerDied(playerId) {
+    this.socketUtils.emitPlayerDied(playerId);
+
+    delete this.players[playerId];
+  }
+
   updateBombs() {
     const bombIds = Object.keys(this.bombs);
     const bombsToRemove = [];
@@ -93,14 +97,16 @@ export default class Game {
       const bomb = this.bombs[bombIds[i]];
       bomb.incrementTimer();
 
-      if (bomb.timer > Bomb.EXPLODE_TIMER) {
-        handleBombExplode(bomb);
+      if (bomb.timer > Bomb.EXPLODE_TIMER && !bomb.exploded) {
+        this.handleBombExplode(bomb);
+      }
+      if (bomb.exploded && bomb.timer > Bomb.EXPLODE_TIMER + 20) {
         bombsToRemove.push(bomb.id);
       }
     }
 
     bombsToRemove.forEach(b => {
-      delete this.bombs[b.id];
+      delete this.bombs[b];
     });
   }
 
@@ -170,17 +176,20 @@ export default class Game {
           continue;
         }
 
-        const hasCollided = checkCollision({
-          x: player1.x,
-          y: player1.y,
-          width: Player.SIZE,
-          height: Player.SIZE
-        }, {
-          x: player2.x,
-          y: player2.y,
-          width: Player.SIZE,
-          height: Player.SIZE
-        });
+        const hasCollided = checkCollision(
+          {
+            x: player1.x,
+            y: player1.y,
+            width: Player.SIZE,
+            height: Player.SIZE
+          },
+          {
+            x: player2.x,
+            y: player2.y,
+            width: Player.SIZE,
+            height: Player.SIZE
+          }
+        );
         if (hasCollided) {
           collidedPlayerIds.push(player1.id);
           collidedPlayerIds.push(player2.id);
@@ -204,17 +213,20 @@ export default class Game {
       const player = this.players[playerIds[i]];
       for (var j = 0; j < bulletIds.length; j++) {
         const bullet = this.bullets[bulletIds[j]];
-        const hasCollided = checkCollision({
-          x: player.x,
-          y: player.y,
-          width: Player.SIZE,
-          height: Player.SIZE
-        }, {
-          x: bullet.x,
-          y: bullet.y,
-          width: Bullet.SIZE,
-          height: Bullet.SIZE
-        });
+        const hasCollided = checkCollision(
+          {
+            x: player.x,
+            y: player.y,
+            width: Player.SIZE,
+            height: Player.SIZE
+          },
+          {
+            x: bullet.x,
+            y: bullet.y,
+            width: Bullet.SIZE,
+            height: Bullet.SIZE
+          }
+        );
 
         if (hasCollided && bullet.hostId !== player.id) {
           player.decreaseHealth(1);
@@ -230,7 +242,38 @@ export default class Game {
     });
   }
 
-  handleBombExplode() {
+  handleBombExplode(bomb) {
     //   TODO
+
+    const playerIds = Object.keys(this.players);
+
+    const deadPlayerIds = [];
+
+    for (var i = 0; i < playerIds.length; i++) {
+      const player = this.players[playerIds[i]];
+      const hasCollided = checkCollision(
+        {
+          x: bomb.x - Bomb.EXPLODE_SIZE / 2,
+          y: bomb.y - Bomb.EXPLODE_SIZE / 2,
+          width: Bomb.EXPLODE_SIZE,
+          height: Bomb.EXPLODE_SIZE
+        },
+        {
+          x: player.x,
+          y: player.y,
+          width: Player.SIZE,
+          height: Player.SIZE
+        }
+      );
+      if (hasCollided) {
+        deadPlayerIds.push(player.id);
+      }
+    }
+
+    deadPlayerIds.forEach(p => {
+      this.handlePlayerDied(p);
+    });
+
+    bomb.exploded = true;
   }
 }
