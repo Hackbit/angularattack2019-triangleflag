@@ -14,10 +14,18 @@ function updatePlayers(phaserInstance, gameState, socket) {
     }
 
     if (playerElement) {
+      // console.log(player)
+      // console.log('---',playerElement)
       playerElement.x = player.x;
       playerElement.y = player.y;
     }
+    phaserInstance.physics.overlap(player, gameState.players, playerCollision, null, this);
   }
+}
+
+function playerCollision(){
+  debugger
+  alert('collision')
 }
 
 function updateBombs(phaserInstance, gameState) {
