@@ -26,6 +26,7 @@ gameState.initGameLoop(function() {
       players: gameState.players,
       bullets: gameState.bullets,
       bombs: gameState.bombs,
+      powerups: gameState.powerups,
       worldSize: gameState.worldSize,
       playerId: playerSocketId
     });

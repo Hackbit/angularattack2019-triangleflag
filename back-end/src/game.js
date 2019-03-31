@@ -2,9 +2,11 @@ import Player from "./player";
 import Bullet from "./bullet";
 import { checkCollision } from "./utils";
 import Bomb from "./bomb";
+import Powerup from "./powerup";
 
 let nextBulletId = 1;
 let nextBombId = 1;
+let nextPowerupId = 1;
 
 export default class Game {
   constructor(socketUtils) {
@@ -15,7 +17,14 @@ export default class Game {
       x: 1000,
       y: 1000
     };
+    this.powerups = {};
     this.socketUtils = socketUtils;
+
+    for (let i = 0; i < Powerup.COUNT; i++) {
+      nextPowerupId += 1;
+      const powerup = new Powerup(nextPowerupId, this.worldSize);
+      this.powerups[powerup.id] = powerup;
+    }
   }
 
   initGameLoop(cb) {
@@ -25,6 +34,7 @@ export default class Game {
       this.updatePlayers();
       this.handleBoundaryCollison();
       this.handlePlayerCollision();
+      this.handlePowerupCollision();
       cb();
     }, 60);
   }
@@ -240,6 +250,46 @@ export default class Game {
     bulletsToRemove.forEach(b => {
       delete this.bullets[b];
     });
+  }
+  handlePowerupCollision() {
+    const playerIds = Object.keys(this.players);
+    const powerupIds = Object.keys(this.powerups);
+    const powerupsToRemove = [];
+    for (var i = 0; i < playerIds.length; i++) {
+      const player = this.players[playerIds[i]];
+      for (var j = 0; j < powerupIds.length; j++) {
+        const powerup = this.powerups[powerupIds[j]];
+
+        const hasCollided = checkCollision(
+          {
+            x: player.x,
+            y: player.y,
+            width: Player.SIZE,
+            height: Player.SIZE
+          },
+          {
+            x: powerup.x,
+            y: powerup.y,
+            width: Powerup.SIZE,
+            height: Powerup.SIZE
+          }
+        );
+        if (hasCollided) {
+          player.increaseScore();
+          powerupsToRemove.push(powerup.id);
+        }
+      }
+    }
+
+    powerupsToRemove.forEach(p => {
+      delete this.powerups[p];
+    });
+
+    for (let i = 0; i < powerupsToRemove.length; i++) {
+      nextPowerupId += 1;
+      const powerup = new Powerup(nextPowerupId, this.worldSize);
+      this.powerups[powerup.id] = powerup;
+    }
   }
 
   handleBombExplode(bomb) {

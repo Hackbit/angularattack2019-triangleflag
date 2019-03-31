@@ -6,6 +6,7 @@ class Player {
     this.dx = dx;
     this.dy = dy;
     this.health = 5;
+    this.score = 0;
   }
 
   updateDirection({ dx, dy }) {
@@ -47,8 +48,12 @@ class Player {
   decreaseHealth(value) {
     this.health = this.health - value;
   }
+
+  increaseScore() {
+    this.score = this.score + 1;
+  }
 }
 
-Player.SIZE = 10;
+Player.SIZE = 30;
 
 export default Player;

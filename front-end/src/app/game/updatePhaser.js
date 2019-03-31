@@ -1,5 +1,6 @@
 import { addPlayer } from "./player";
 import { addBomb } from "./bomb";
+import { addPowerup } from "./powerup";
 
 function updatePlayers(phaserInstance, gameState, socket) {
   const playerIds = Object.keys(gameState.players);
@@ -19,13 +20,19 @@ function updatePlayers(phaserInstance, gameState, socket) {
       playerElement.x = player.x;
       playerElement.y = player.y;
     }
-    phaserInstance.physics.overlap(player, gameState.players, playerCollision, null, this);
+    phaserInstance.physics.overlap(
+      player,
+      gameState.players,
+      playerCollision,
+      null,
+      this
+    );
   }
 }
 
-function playerCollision(){
-  debugger
-  alert('collision')
+function playerCollision() {
+  debugger;
+  alert("collision");
 }
 
 function updateBombs(phaserInstance, gameState) {
@@ -50,7 +57,38 @@ function updateBombs(phaserInstance, gameState) {
   }
 }
 
+function updatePowerups(phaserInstance, gameState, socket) {
+  const powerupIds = Object.keys(gameState.powerups);
+  for (var i = 0; i < powerupIds.length; i++) {
+    const powerupId = powerupIds[i];
+    const powerup = gameState.powerups[powerupId];
+
+    let powerupElement = phaserInstance.elements[`powerup-${powerupId}`];
+    if (!powerupElement) {
+      addPowerup(phaserInstance, powerup);
+    }
+  }
+}
+
+function cleanupElements(phaserInstance, gameState) {
+  const elementIds = Object.keys(phaserInstance.elements);
+  let ids = [];
+  ids = ids.concat(Object.keys(gameState.players));
+  ids = ids.concat(Object.keys(gameState.bombs).map(id => `bomb-${id}`));
+  ids = ids.concat(Object.keys(gameState.powerups).map(id => `powerup-${id}`));
+  const elementsToRemove = elementIds.filter(eid => {
+    return ids.indexOf(eid) === -1;
+  });
+  elementsToRemove.forEach(eid => {
+    const peleme = phaserInstance.elements[eid];
+    peleme.destroy();
+    delete phaserInstance.elements[eid];
+  });
+}
+
 export default function updatePhaser(phaserInstance, gameState, socket) {
   updatePlayers(phaserInstance, gameState, socket);
   updateBombs(phaserInstance, gameState, socket);
+  updatePowerups(phaserInstance, gameState, socket);
+  cleanupElements(phaserInstance, gameState);
 }

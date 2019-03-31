@@ -2,7 +2,7 @@ export function addPlayer(phaserInstance, gameState, player) {
   const playerElement = phaserInstance.physics.add.sprite(
     player.x,
     player.y,
-    'star'
+    "dude"
   );
   playerElement.setDisplaySize(30, 30);
   playerElement.setCollideWorldBounds(true);
