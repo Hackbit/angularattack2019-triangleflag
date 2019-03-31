@@ -87,7 +87,7 @@ export default class Game {
     const bombIds = Object.keys(this.bombs);
     const bombsToRemove = [];
 
-    for (var i = 0; i < bombIds.length; j++) {
+    for (var i = 0; i < bombIds.length; i++) {
       const bomb = this.bombs[bombIds[i]];
       bomb.incrementTimer();
 
