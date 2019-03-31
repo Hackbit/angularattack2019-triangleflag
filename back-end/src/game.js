@@ -1,6 +1,6 @@
 import Player from "./player";
 import Bullet from "./bullet";
-import { checkCollision } from "./utils";
+import { checkCollision, getRandomInt } from "./utils";
 import Bomb from "./bomb";
 import Powerup from "./powerup";
 
@@ -42,8 +42,8 @@ export default class Game {
   addNewPlayer(playerId) {
     const player = new Player({
       id: playerId,
-      x: 20,
-      y: 20,
+      x: getRandomInt(10, this.worldSize.x - 10),
+      y: getRandomInt(10, this.worldSize.y - 10),
       dx: 0,
       dy: 0,
       health: 5

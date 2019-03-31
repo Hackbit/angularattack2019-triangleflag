@@ -9,3 +9,9 @@ export function checkCollision(rect1, rect2) {
   }
   return false;
 }
+
+export function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
