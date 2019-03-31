@@ -18,7 +18,44 @@ const sService = new SocketService()
   template: `
     <div>
       <div class="game-wrap">
-        <div>Score: {{ this.score }}</div>
+        <div class="header">
+          <div>
+            <div class="name">
+              {{ this.playerName }}
+            </div>
+            <div>Score: {{ this.score }}</div>
+            <div class="help-container">Help</div>
+
+            <div class="help">
+              <h1>
+                Controls
+              </h1>
+
+              <div style="margin-top: -45px">
+                <ul>
+                  <li><h3>Movement:</h3></li>
+                  <li>"h" -> Move 1 step LEFT</li>
+                  <li>"j" -> Move 1 step UP</li>
+                  <li>"k" -> Move 1 step "DOWN"</li>
+                  <li>"l" -> Move 1 step right</li>
+                </ul>
+                <ul>
+                  <li><h3>Attack:</h3></li>
+                  <li>"Type bomb" -> Plant a bomb</li>
+                </ul>
+                <ul>
+                  <li>
+                    <h3>Blink:</h3>
+                  </li>
+                  <li>"e" -> Blink right</li>
+                  <li>"b" -> Blink left</li>
+                  <li>"gg" -> Blink to top</li>
+                  <li>"Shit + gg" -> Blink to bottom</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
         <phaser-component
           [gameConfig]="gameConfig"
           (gameReady)="onGameReady($event)"

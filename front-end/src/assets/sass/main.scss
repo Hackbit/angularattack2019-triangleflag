@@ -89,3 +89,41 @@ p {
     margin-bottom: 50px;
   }
 }
+
+.header {
+  position: relative;
+
+  >div {
+    @extend .container;
+    padding: 1rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .name {
+      margin-right: 10px;
+      font-weight: $fontWeightBold;
+    }
+
+  }
+
+  .help-container {
+    ~.help {
+      @extend .container;
+      position: absolute;
+      right: 0;
+      cursor: pointer;
+      display: none;
+    }
+
+    &:hover {
+      ~.help {
+        display: block;
+      }
+    }
+  }
+
+
+}
