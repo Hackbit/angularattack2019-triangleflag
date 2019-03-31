@@ -6,7 +6,8 @@ export const environment = {
   production: false,
   hmr: false,
   title: 'Phangular - Development Build',
-  version: require('../../package.json').version
+  version: require('../../package.json').version,
+  socketURL: 'http://localhost:3000'
 };
 
 /*

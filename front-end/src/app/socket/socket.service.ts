@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
-
 import * as io from 'socket.io-client'
+
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class SocketService {
   observable: Observable<string>
   socket
   constructor() {
-    this.socket = io('http://localhost:3000')
+    this.socket = io(environment.socketURL)
   }
 
   onConnectSuccess(): Observable<string> {
