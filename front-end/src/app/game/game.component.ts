@@ -16,7 +16,7 @@ const sService = new SocketService();
 @Component({
   selector: "game-component",
   template: `
-    <div>
+    <div class="game-wrap">
       <phaser-component
         [gameConfig]="gameConfig"
         (gameReady)="onGameReady($event)"
