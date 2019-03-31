@@ -1,6 +1,8 @@
 import Player from "./player";
 import Bullet from "./bullet";
-import { checkCollision } from "./utils";
+import {
+  checkCollision
+} from "./utils";
 import Bomb from "./bomb";
 
 let nextBulletId = 1;
@@ -106,7 +108,7 @@ export default class Game {
     const bulletIds = Object.keys(this.bullets);
     const bulletsToRemove = [];
 
-    for (var i = 0; i < bulletIds.length; j++) {
+    for (var i = 0; i < bulletIds.length; i++) {
       const bullet = this.bullets[bulletIds[i]];
       bullet.incrementPosition();
       if (bullet.updateCount > 10) {
@@ -168,20 +170,17 @@ export default class Game {
           continue;
         }
 
-        const hasCollided = checkCollision(
-          {
-            x: player1.x,
-            y: player1.y,
-            width: Player.SIZE,
-            height: Player.SIZE
-          },
-          {
-            x: player2.x,
-            y: player2.y,
-            width: Player.SIZE,
-            height: Player.SIZE
-          }
-        );
+        const hasCollided = checkCollision({
+          x: player1.x,
+          y: player1.y,
+          width: Player.SIZE,
+          height: Player.SIZE
+        }, {
+          x: player2.x,
+          y: player2.y,
+          width: Player.SIZE,
+          height: Player.SIZE
+        });
         if (hasCollided) {
           collidedPlayerIds.push(player1.id);
           collidedPlayerIds.push(player2.id);
@@ -205,20 +204,17 @@ export default class Game {
       const player = this.players[playerIds[i]];
       for (var j = 0; j < bulletIds.length; j++) {
         const bullet = this.bullets[bulletIds[j]];
-        const hasCollided = checkCollision(
-          {
-            x: player.x,
-            y: player.y,
-            width: Player.SIZE,
-            height: Player.SIZE
-          },
-          {
-            x: bullet.x,
-            y: bullet.y,
-            width: Bullet.SIZE,
-            height: Bullet.SIZE
-          }
-        );
+        const hasCollided = checkCollision({
+          x: player.x,
+          y: player.y,
+          width: Player.SIZE,
+          height: Player.SIZE
+        }, {
+          x: bullet.x,
+          y: bullet.y,
+          width: Bullet.SIZE,
+          height: Bullet.SIZE
+        });
 
         if (hasCollided && bullet.hostId !== player.id) {
           player.decreaseHealth(1);
