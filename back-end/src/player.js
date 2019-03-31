@@ -87,7 +87,7 @@ class Player {
   }
 
   increaseScore() {
-    this.score = this.score + 1;
+    this.score = this.score + 10;
   }
 }
 

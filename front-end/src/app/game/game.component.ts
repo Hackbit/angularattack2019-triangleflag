@@ -131,7 +131,10 @@ export class GameComponent {
 
   onGameUpdate(data) {
     gameState = data;
-    // console.log(data);
+    // TODO @anuj move this scores to out on template
+    let player = data.players[data.playerId]
+    console.log(player.score)
+    // Object.values(data.players).forEach(player=>console.log(player.score))
   }
 
   onShoot() {
