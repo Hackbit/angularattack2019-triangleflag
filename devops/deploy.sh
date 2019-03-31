@@ -4,7 +4,7 @@ bold=$(tput bold)
 normal=$(tput sgr0)
 
 `git remote add backend https://git.heroku.com/triangleflag-api.git && true`
-`git remote add front-end https://git.heroku.com/triangleflag.git && true`
+`git remote add frontend https://git.heroku.com/triangleflag.git && true`
 
 current_branch=`git rev-parse --abbrev-ref HEAD`
 
