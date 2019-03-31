@@ -21,6 +21,8 @@ const sService = new SocketService();
       ></phaser-component>
       <br />
       <input
+        autofocus
+        id="cli"
         (keyup)="onKey($event)"
         style="width: 660px; text-align: left;"
         value="{{ this.values }}"
