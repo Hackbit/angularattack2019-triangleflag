@@ -1,4 +1,4 @@
-import { Component, Input, NgZone } from '@angular/core'
+import { Component, Input, NgZone, Output, EventEmitter } from '@angular/core'
 import { environment } from '../../environments/environment'
 
 import createPhaser from './createPhaser'
@@ -6,6 +6,7 @@ import updatePhaser from './updatePhaser'
 import preloadPhaser from './preloadPhaser'
 
 import { SocketService } from '../socket/socket.service'
+import { Player } from '../models/player'
 
 let gameState = {
   playerId: null,
@@ -16,7 +17,7 @@ const sService = new SocketService()
 @Component({
   selector: 'game-component',
   template: `
-    <div>
+    <div *ngIf="!this.over">
       <div class="game-wrap">
         <div class="header">
           <div>
@@ -62,6 +63,14 @@ const sService = new SocketService()
         ></phaser-component>
       </div>
     </div>
+    <ul class="container" *ngIf="this.over">
+      <h1>Scoreboard</h1>
+      <li *ngFor="let p of scoreList; index as i">
+        {{ p[i] && p[i].id }}
+        {{ p[i] && p[i].score }}
+      </li>
+      <button (click)="goReload()">Reload</button>
+    </ul>
   `,
   styleUrls: ['./game.component.scss'],
   providers: [SocketService],
@@ -71,6 +80,9 @@ export class GameComponent {
    * Game instance.
    */
 
+  scoreList = []
+  over = false
+
   @Input()
   playerName: string
 
@@ -78,6 +90,10 @@ export class GameComponent {
 
   public game: Phaser.Game
   public values: any
+
+  goReload = () => {
+    window.location.reload()
+  }
 
   /**
    * Game configuration.
@@ -182,17 +198,31 @@ export class GameComponent {
     let player = data.players[data.playerId]
     this.ngZone &&
       this.ngZone.run(() => {
-        this.score = player.score
+        this.score = player && player.score
+        if (player) {
+          this.scoreList = []
+          Object.values(data.players).forEach(p =>
+            this.scoreList.push([
+              {
+                id: p && p['id'],
+                score: p && p['score'],
+              },
+            ])
+          )
+        }
       })
-    // Object.values(data.players).forEach(player=>console.log(player.score))
   }
 
   onShoot() {
     sService.shoot()
   }
 
-  onPlayerDied() {
-    alert('YOU DEAD MAN')
+  onPlayerDied = () => {
+    this.ngZone &&
+      this.ngZone.run(() => {
+        this.over = true
+        console.log(this.over)
+      })
   }
 
   addBomb() {

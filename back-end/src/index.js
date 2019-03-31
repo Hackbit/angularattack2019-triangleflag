@@ -16,7 +16,7 @@ let socketUtils = {
 
 let gameState = new Game(socketUtils);
 
-gameState.initGameLoop(function() {
+gameState.initGameLoop(function () {
   console.log(gameState);
   const playerSocketIds = Object.keys(playerSockets);
   playerSocketIds.forEach(playerSocketId => {
@@ -33,7 +33,7 @@ gameState.initGameLoop(function() {
   });
 });
 
-io.on("connection", function(socket) {
+io.on("connection", function (socket) {
   const playerId = socket.id;
 
   const player = gameState.addNewPlayer(socket.id);
@@ -44,17 +44,34 @@ io.on("connection", function(socket) {
     playerId
   });
 
-  socket.on("player-change-direction", function({ dx, dy }) {
+  socket.on("player-change-direction", function ({
+    dx,
+    dy
+  }) {
     const player = gameState.players[playerId];
-    player.updateDirection({ dx, dy });
+    player.updateDirection({
+      dx,
+      dy
+    });
   });
 
-  socket.on("player-change-position", function({ dx, dy, blink }) {
+  socket.on("player-change-position", function ({
+    dx,
+    dy,
+    blink
+  }) {
     const player = gameState.players[playerId];
-    player.updatePosition({ dx, dy, blink });
+    player && player.updatePosition({
+      dx,
+      dy,
+      blink
+    });
   });
 
-  socket.on("player-blink-to-edge", function({ top, bottom }) {
+  socket.on("player-blink-to-edge", function ({
+    top,
+    bottom
+  }) {
     const player = gameState.players[playerId];
     if (top) {
       player.blinkToPosition({
@@ -69,23 +86,23 @@ io.on("connection", function(socket) {
     }
   });
 
-  socket.on("add-bomb", function() {
+  socket.on("add-bomb", function () {
     const player = gameState.players[playerId];
     gameState.addNewBomb(player);
   });
 
-  socket.on("player-shoot", function() {
+  socket.on("player-shoot", function () {
     const player = gameState.players[playerId];
     gameState.addNewBullet(player);
   });
 
-  socket.on("disconnect", function() {
+  socket.on("disconnect", function () {
     delete playerSockets[socket.id];
     gameState.removePlayer(playerId);
   });
 });
 
 var listeningPort = process.env.PORT || 3000;
-http.listen(listeningPort, function() {
+http.listen(listeningPort, function () {
   console.log("listening on *:" + listeningPort);
 });
