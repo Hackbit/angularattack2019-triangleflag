@@ -42,7 +42,6 @@ class Player {
     this.dy = this.dy * -1;
     this.x = this.x + 500 * this.dx;
     this.y = this.y + 500 * this.dy;
-    this.health = this.health - 1;
   }
 
   decreaseHealth(value) {

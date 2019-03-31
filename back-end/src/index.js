@@ -4,10 +4,20 @@ var io = require("socket.io")(http);
 
 import Game from "./game";
 
-let gameState = new Game();
 const playerSockets = {};
 
+let socketUtils = {
+  emitPlayerDied(playerId) {
+    const playerSocket = playerSockets[playerId];
+    playerSocket.emit("player-dead");
+    delete playerSocket[playerId];
+  }
+};
+
+let gameState = new Game(socketUtils);
+
 gameState.initGameLoop(function() {
+  console.log(gameState);
   const playerSocketIds = Object.keys(playerSockets);
   playerSocketIds.forEach(playerSocketId => {
     const socket = playerSockets[playerSocketId];

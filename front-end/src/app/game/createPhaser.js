@@ -33,6 +33,7 @@ function initCamera(phaserInstance, gameState) {
 
 export default function createPhaser(phaserInstance, gameState) {
   phaserInstance.elements = {};
+
   initCamera(phaserInstance, gameState);
   createElements(phaserInstance, gameState);
   phaserInstance.cursor = phaserInstance.input.keyboard.createCursorKeys();
